@@ -1,2 +1,0 @@
-packages\NuGet.CommandLine.2.8.1\tools\NuGet.exe pack src\EntityFramework.Testing\EntityFramework.Testing.csproj
-packages\NuGet.CommandLine.2.8.1\tools\NuGet.exe pack src\EntityFramework.Testing.Moq\EntityFramework.Testing.Moq.csproj
