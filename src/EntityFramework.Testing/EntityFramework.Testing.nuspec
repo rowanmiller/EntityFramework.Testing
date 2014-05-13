@@ -7,7 +7,7 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/rowanmiller/EntityFramework.Testing/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/rowanmiller/EntityFramework.Testing</projectUrl>
+    <projectUrl>https://github.com/rowanmiller/EntityFramework.Testing/wiki</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Early preview of some testing helpers for Entity Framework.</description>
     <copyright>Copyright 2014</copyright>
