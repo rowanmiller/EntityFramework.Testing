@@ -17,7 +17,7 @@ namespace EntityFramework.Testing.Moq
             _queryable = _data.AsQueryable();
         }
 
-        public IEnumerable<TEntity> Data
+        public ICollection<TEntity> Data
         {
             get { return _data; }
         }
@@ -29,7 +29,7 @@ namespace EntityFramework.Testing.Moq
             get { return _queryable; }
         }
 
-        internal void AddData(IEnumerable<TEntity> data)
+        internal void AddData(ICollection<TEntity> data)
         {
             _data.AddRange(data);
         }

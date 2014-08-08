@@ -166,6 +166,23 @@ namespace EntityFramework.Testing.Moq.Tests
             Assert.AreEqual(2, result.Count);
         }
 
+        [TestMethod]
+        public void Can_remove_set()
+        {
+            var blog = new Blog();
+            var data = new List<Blog> { blog };
+
+            var set = new MockDbSet<Blog>()
+                .SetupLinq()
+                .SetupSeedData(data);
+
+            set.Object.Remove(blog);
+
+            var result = set.Object.ToList();
+
+            Assert.AreEqual(0, result.Count);
+        }
+
         public class Blog
         {
             public int BlogId { get; set; }

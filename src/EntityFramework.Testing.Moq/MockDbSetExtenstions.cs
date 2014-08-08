@@ -9,7 +9,7 @@ namespace EntityFramework.Testing.Moq
     {
         public static MockDbSet<TEntity> SetupSeedData<TEntity>(
             this MockDbSet<TEntity> set, 
-            IEnumerable<TEntity> data)
+            ICollection<TEntity> data)
             where TEntity : class
         {
             set.AddData(data);
@@ -47,6 +47,14 @@ namespace EntityFramework.Testing.Moq
             // Enable Include directly on the DbSet (Include extension method on IQueryable is a no-op when it's not a DbSet/DbQuery)
             // Include(string) and Include(Func<TEntity, TProperty) both fall back to string
             set.Setup(s => s.Include(It.IsAny<string>())).Returns(set.Object);
+
+            // Enable Remove on the DbSet
+            set.Setup(s => s.Remove(It.IsAny<TEntity>())).Callback<TEntity>(t =>
+            {
+                set.Data.Remove(t);
+                set.SetupLinq();
+            });
+
             return set;
         }
     }
