@@ -1,23 +1,22 @@
-﻿using System;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Moq;
 
 namespace EntityFramework.Testing.Moq.Tests
 {
     [TestClass]
-    public class FakeDbSetLinqTests
+    public class QueryTests
     {
         [TestMethod]
         public void Can_enumerate_set()
         {
             var data = new List<Blog> { new Blog {},  new Blog {}  };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+            .SetupData(data);
 
             var count = 0;
             foreach (var item in set.Object)
@@ -27,49 +26,48 @@ namespace EntityFramework.Testing.Moq.Tests
 
             Assert.AreEqual(2, count);
         }
-
+#if !NET40
         [TestMethod]
         public async Task Can_enumerate_set_async()
         {
             var data = new List<Blog> { new Blog(), new Blog() };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+                .SetupData(data);
 
             var count = 0;
             await set.Object.ForEachAsync(b => count++);
 
             Assert.AreEqual(2, count);
         }
-
+#endif
         [TestMethod]
         public void Can_use_linq_materializer_directly_on_set()
         {
             var data = new List<Blog> { new Blog(), new Blog() };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+                .SetupData(data);
 
             var result = set.Object.ToList();
 
             Assert.AreEqual(2, result.Count);
         }
 
+#if !NET40
         [TestMethod]
         public async Task Can_use_linq_materializer_directly_on_set_async()
         {
             var data = new List<Blog> { new Blog(), new Blog() };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+                .SetupData(data);
 
             var result = await set.Object.ToListAsync();
 
             Assert.AreEqual(2, result.Count);
         }
+#endif
 
         [TestMethod]
         public void Can_use_linq_opeartors()
@@ -81,9 +79,8 @@ namespace EntityFramework.Testing.Moq.Tests
                 new Blog { BlogId = 3}
             };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+                .SetupData(data);
 
             var result = set.Object
                 .Where(b => b.BlogId > 1)
@@ -95,6 +92,7 @@ namespace EntityFramework.Testing.Moq.Tests
             Assert.AreEqual(2, result[1].BlogId);
         }
 
+#if !NET40
         [TestMethod]
         public async Task Can_use_linq_opeartors_async()
         {
@@ -105,9 +103,8 @@ namespace EntityFramework.Testing.Moq.Tests
                 new Blog { BlogId = 3}
             };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+                .SetupData(data);
 
             var result = await set.Object
                 .Where(b => b.BlogId > 1)
@@ -119,14 +116,15 @@ namespace EntityFramework.Testing.Moq.Tests
             Assert.AreEqual(2, result[1].BlogId);
         }
 
+#endif
+
         [TestMethod]
         public void Can_use_include_directly_on_set()
         {
             var data = new List<Blog> { new Blog(), new Blog() };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+                .SetupData(data);
 
             var result = set.Object
                 .Include(b => b.Posts)
@@ -140,9 +138,8 @@ namespace EntityFramework.Testing.Moq.Tests
         {
             var data = new List<Blog> { new Blog(), new Blog() };
 
-            var set = new MockDbSet<Blog>()
-                .SetupSeedData(data)
-                .SetupLinq();
+            var set = new Mock<DbSet<Blog>>()
+                .SetupData(data);
 
             var result = set.Object
                 .OrderBy(b => b.BlogId)
@@ -150,37 +147,6 @@ namespace EntityFramework.Testing.Moq.Tests
                 .ToList();
 
             Assert.AreEqual(2, result.Count);
-        }
-
-        [TestMethod]
-        public void Can_add_data_after_setting_up_linq()
-        {
-            var data = new List<Blog> { new Blog(), new Blog() };
-
-            var set = new MockDbSet<Blog>()
-                .SetupLinq()
-                .SetupSeedData(data);
-
-            var result = set.Object.ToList();
-
-            Assert.AreEqual(2, result.Count);
-        }
-
-        [TestMethod]
-        public void Can_remove_set()
-        {
-            var blog = new Blog();
-            var data = new List<Blog> { blog };
-
-            var set = new MockDbSet<Blog>()
-                .SetupLinq()
-                .SetupSeedData(data);
-
-            set.Object.Remove(blog);
-
-            var result = set.Object.ToList();
-
-            Assert.AreEqual(0, result.Count);
         }
 
         public class Blog
