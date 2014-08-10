@@ -1,10 +1,10 @@
 ## EntityFramework.Testing
-EntityFramework.Testing provides an implementation of IDbAsyncQueryProvider that can be used when testing a component that uses async queries with EntityFramework. You can read more about how to use these components at http://msdn.com/data/dn314429#async.
+EntityFramework.Testing provides an implementation of `DbAsyncQueryProvider` that can be used when testing a component that uses async queries with EntityFramework. You can read more about how to use these components at http://msdn.com/data/dn314429#async.
 
-It was cut from Entity Frameworks' [source code](http://entityframework.codeplex.com/SourceControl/latest#test/EntityFramework/FunctionalTests/TestDoubles/) and made some changes to be compliance with StyleCop/CodeAnalysis
+The project was cut from EntityFrameworks' [source code](http://entityframework.codeplex.com/SourceControl/latest#test/EntityFramework/FunctionalTests/TestDoubles/). Some changes were made to be compliance with StyleCop/CodeAnalysis
 
 ## EntityFramework.Testing.Moq
-EntityFramework.Testing.Moq provides a helpful extension method to mock an Entity Framework's DbSets using Moq. 
+EntityFramework.Testing.Moq provides a helpful extension method to mock an EntityFramework's DbSets using Moq. 
 
 For example, given the following controller.
 
