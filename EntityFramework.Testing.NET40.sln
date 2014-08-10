@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework.Testing", "src\EntityFramework.Testing\EntityFramework.Testing.csproj", "{4351E4D4-C68C-4CF6-998B-AB56D8A3760D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework.Testing.NET40", "src\EntityFramework.Testing\EntityFramework.Testing.NET40.csproj", "{4351E4D4-C68C-4CF6-998B-AB56D8A3760D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework.Testing.Moq", "src\EntityFramework.Testing.Moq\EntityFramework.Testing.Moq.csproj", "{13B2C70C-A084-44AF-8F75-975D84438DEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework.Testing.Moq.NET40", "src\EntityFramework.Testing.Moq\EntityFramework.Testing.Moq.NET40.csproj", "{13B2C70C-A084-44AF-8F75-975D84438DEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{56EF6CEF-D305-42B5-B0FC-1528B670548E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7532A630-3026-4E1A-9E5C-13611C22C5F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework.Testing.Moq.Tests", "test\EntityFramework.Testing.Moq.Tests\EntityFramework.Testing.Moq.Tests.csproj", "{1F55F581-F0D8-423D-A514-636C161ACDB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFramework.Testing.Moq.Tests.NET40", "test\EntityFramework.Testing.Moq.Tests\EntityFramework.Testing.Moq.Tests.NET40.csproj", "{1F55F581-F0D8-423D-A514-636C161ACDB4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A5D7A40E-6C6E-4119-A6FA-861C176A3F2A}"
 	ProjectSection(SolutionItems) = preProject

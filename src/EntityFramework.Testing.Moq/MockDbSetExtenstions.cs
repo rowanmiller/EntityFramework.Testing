@@ -1,53 +1,82 @@
-﻿using Moq;
-using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
+﻿//-----------------------------------------------------------------------------------------------------
+// <copyright file="MockDbSetExtenstions.cs" company="Rowan Miller">
+//   Copyright (c) 2014 Rowan Miller.
+//   Modified by Scott Xu.
+// </copyright>
+//-----------------------------------------------------------------------------------------------------
 
 namespace EntityFramework.Testing.Moq
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Linq;
+    using global::Moq;
+
+    /// <summary>
+    /// Extension methods to <see cref="Mock{DbSet{TEntity}}"/>.
+    /// </summary>
     public static class MockDbSetExtenstions
     {
-        public static MockDbSet<TEntity> SetupSeedData<TEntity>(
-            this MockDbSet<TEntity> set, 
-            IEnumerable<TEntity> data)
-            where TEntity : class
+        /// <summary>
+        /// Setup data to <see cref="Mock{DbSet{TEntity}}"/>.
+        /// </summary>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="mock">The <see cref="Mock{DbSet{TEntity}}"/>.</param>
+        /// <param name="data">The seed data.</param>
+        /// <param name="find">The find action.</param>
+        /// <returns>The updated <see cref="Mock{DbSet{TEntity}}"/>.</returns>
+        public static Mock<DbSet<TEntity>> SetupData<TEntity>(this Mock<DbSet<TEntity>> mock, ICollection<TEntity> data = null, Func<object[], TEntity> find = null) where TEntity : class
         {
-            set.AddData(data);
+            data = data ?? new List<TEntity>();
+            find = find ?? (o => null);
 
-            // Need to re-setup LINQ if the data changes
-            if(set.IsLinqSetup)
+            var query = new InMemoryAsyncQueryable<TEntity>(data.AsQueryable());
+
+            mock.As<IQueryable<TEntity>>().Setup(m => m.Provider).Returns(query.Provider);
+            mock.As<IQueryable<TEntity>>().Setup(m => m.Expression).Returns(query.Expression);
+            mock.As<IQueryable<TEntity>>().Setup(m => m.ElementType).Returns(query.ElementType);
+            mock.As<IQueryable<TEntity>>().Setup(m => m.GetEnumerator()).Returns(query.GetEnumerator());
+#if !NET40
+            mock.As<IDbAsyncEnumerable<TEntity>>().Setup(m => m.GetAsyncEnumerator()).Returns(query.GetAsyncEnumerator());
+#endif
+            mock.Setup(m => m.Include(It.IsAny<string>())).Returns(mock.Object);
+            mock.Setup(m => m.Find(It.IsAny<object[]>())).Returns<object[]>(find);
+
+            mock.Setup(m => m.Remove(It.IsAny<TEntity>())).Callback<TEntity>(entity =>
             {
-                set.SetupLinq();
-            }
+                data.Remove(entity);
+                mock.SetupData(data, find);
+            });
 
-            return set;
-        }
+            mock.Setup(m => m.RemoveRange(It.IsAny<IEnumerable<TEntity>>())).Callback<IEnumerable<TEntity>>(entities =>
+            {
+                foreach (var entity in entities)
+                {
+                    data.Remove(entity);
+                }
 
-        public static MockDbSet<TEntity> SetupLinq<TEntity>(this MockDbSet<TEntity> set)
-            where TEntity : class
-        {
-            // Record so that we can re-setup linq if the data is changed
-            set.IsLinqSetup = true;
+                mock.SetupData(data, find);
+            });
 
-            // Enable direct async enumeration of set
-            set.As<IDbAsyncEnumerable<TEntity>>()
-                .Setup(m => m.GetAsyncEnumerator())
-                .Returns(new TestDbAsyncEnumerator<TEntity>(set.Queryable.GetEnumerator()));
+            mock.Setup(m => m.Add(It.IsAny<TEntity>())).Callback<TEntity>(entity =>
+            {
+                data.Add(entity);
+                mock.SetupData(data, find);
+            });
 
-            // Enable LINQ queries with async enumeration
-            set.As<IQueryable<TEntity>>()
-                .Setup(m => m.Provider)
-                .Returns(new TestDbAsyncQueryProvider<TEntity>(set.Queryable.Provider));
+            mock.Setup(m => m.AddRange(It.IsAny<IEnumerable<TEntity>>())).Callback<IEnumerable<TEntity>>(entities =>
+            {
+                foreach (var entity in entities)
+                {
+                    data.Add(entity);
+                };
 
-            // Wire up LINQ provider to fall back to in memory LINQ provider of the data
-            set.As<IQueryable<TEntity>>().Setup(m => m.Expression).Returns(set.Queryable.Expression);
-            set.As<IQueryable<TEntity>>().Setup(m => m.ElementType).Returns(set.Queryable.ElementType);
-            set.As<IQueryable<TEntity>>().Setup(m => m.GetEnumerator()).Returns(set.Queryable.GetEnumerator());
+                mock.SetupData(data, find);
+            });
 
-            // Enable Include directly on the DbSet (Include extension method on IQueryable is a no-op when it's not a DbSet/DbQuery)
-            // Include(string) and Include(Func<TEntity, TProperty) both fall back to string
-            set.Setup(s => s.Include(It.IsAny<string>())).Returns(set.Object);
-            return set;
+            return mock;
         }
     }
 }
