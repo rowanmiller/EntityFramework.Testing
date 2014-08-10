@@ -1,6 +1,7 @@
 ﻿//-----------------------------------------------------------------------------------------------------
-// <copyright file="MockDbSetExtenstions.cs" company="Scott Xu">
-//   Copyright (c) 2014 Scott Xu.
+// <copyright file="MockDbSetExtenstions.cs" company="Rowan Miller">
+//   Copyright (c) 2014 Rowan Miller.
+//   Modified by Scott Xu.
 // </copyright>
 //-----------------------------------------------------------------------------------------------------
 
