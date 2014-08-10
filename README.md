@@ -27,7 +27,7 @@ public class BlogsController : Controller
 }
 ```
 
-You can write a unit test against an mock context as follows. SetupData extension method is part of EntityFramework.Testing.Moq.
+You can write a unit test against an mock context as follows. `SetupData` extension method is part of EntityFramework.Testing.Moq.
 
 ```
 [TestMethod]
