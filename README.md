@@ -4,7 +4,7 @@ EntityFramework.Testing provides an implementation of `DbAsyncQueryProvider` tha
 The project was cut from EntityFrameworks' [source code](http://entityframework.codeplex.com/SourceControl/latest#test/EntityFramework/FunctionalTests/TestDoubles/). Some changes were made to be compliance with StyleCop/CodeAnalysis
 
 ## EntityFramework.Testing.Moq
-EntityFramework.Testing.Moq provides a helpful extension method to mock an EntityFramework's DbSets using Moq. 
+EntityFramework.Testing.Moq provides a helpful extension method to mock EntityFramework's DbSets using Moq. 
 
 For example, given the following controller.
 
