@@ -1,71 +1,127 @@
-﻿namespace EntityFramework.Testing
+﻿//-----------------------------------------------------------------------------------------------------
+// <copyright file="InMemoryAsyncQueryable{T}.cs" company="Microsoft Open Technologies, Inc">
+//   Copyright (c) Microsoft Open Technologies, Inc. All rights reserved.
+//   Modified by Scott Xu to be compliance with StyleCop.
+// </copyright>
+//-----------------------------------------------------------------------------------------------------
+
+namespace EntityFramework.Testing
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+#if !NET40
     using System.Data.Entity.Infrastructure;
+#endif
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Text;
-    using System.Threading.Tasks;
 
-    public class InMemoryAsyncQueryable<T> : IOrderedQueryable<T>
+    /// <summary>
+    /// Represents in-memory async query-able object.
+    /// </summary>
+    /// <typeparam name="T">The type of the content of the data source.</typeparam>
 #if !NET40
-, IDbAsyncEnumerable<T>
+    public class InMemoryAsyncQueryable<T> : IOrderedQueryable<T>, IDbAsyncEnumerable<T>
+#else
+    public class InMemoryAsyncQueryable<T> : IOrderedQueryable<T>
 #endif
     {
-        private readonly IQueryable<T> _queryable;
-        private readonly Action<string, IEnumerable> _include;
+        /// <summary>
+        /// The query-able object.
+        /// </summary>
+        private readonly IQueryable<T> queryable;
 
+        /// <summary>
+        /// The Include action.
+        /// </summary>
+        private readonly Action<string, IEnumerable> include;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InMemoryAsyncQueryable{T}"/> class.
+        /// </summary>
+        /// <param name="queryable">The query-able object.</param>
+        /// <param name="include">The Include action.</param>
         public InMemoryAsyncQueryable(IQueryable<T> queryable, Action<string, IEnumerable> include = null)
         {
-            _queryable = queryable;
-            _include = include;
+            this.queryable = queryable;
+            this.include = include;
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _queryable.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
+        /// <summary>
+        /// Gets the expression tree that is associated with the instance of <see cref="InMemoryAsyncQueryable{T}"/>.
+        /// </summary>
         public Expression Expression
         {
-            get { return _queryable.Expression; }
+            get { return this.queryable.Expression; }
         }
 
+        /// <summary>
+        /// Gets the type of the element(s) that are returned when the expression tree
+        /// associated with this instance of <see cref="InMemoryAsyncQueryable{T}"/> is executed.
+        /// </summary>
         public Type ElementType
         {
-            get { return _queryable.ElementType; }
+            get { return this.queryable.ElementType; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="InMemoryAsyncQueryProvider"/>.
+        /// </summary>
         public IQueryProvider Provider
         {
-            get { return new InMemoryAsyncQueryProvider(_queryable.Provider, _include); }
+            get { return new InMemoryAsyncQueryProvider(this.queryable.Provider, this.include); }
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>A <see cref="IEnumerator{T}"/> that can be used to iterate through the collection.</returns>
+        public IEnumerator<T> GetEnumerator()
+        {
+            return this.queryable.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>A <see cref="IEnumerator"/> that can be used to iterate through the collection.</returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Include navigation properties.
+        /// </summary>
+        /// <param name="path">The property path.</param>
+        /// <returns>The query-able object itself.</returns>
         public IQueryable<T> Include(string path)
         {
-            if (_include != null)
+            if (this.include != null)
             {
-                _include(path, _queryable);
+                this.include(path, this.queryable);
             }
+
             return this;
         }
 
 #if !NET40
+        /// <summary>
+        /// Get generic DB async enumerator
+        /// </summary>
+        /// <returns>The <see cref="IDBAsyncEnumerator{T}"/>.</returns>
         public IDbAsyncEnumerator<T> GetAsyncEnumerator()
         {
-            return new InMemoryDbAsyncEnumerator<T>(GetEnumerator());
+            return new InMemoryDbAsyncEnumerator<T>(this.GetEnumerator());
         }
 
+        /// <summary>
+        /// Get DB async enumerator
+        /// </summary>
+        /// <returns>The <see cref="IDBAsyncEnumerator"/>.</returns>
         IDbAsyncEnumerator IDbAsyncEnumerable.GetAsyncEnumerator()
         {
-            return GetAsyncEnumerator();
+            return this.GetAsyncEnumerator();
         }
 #endif
     }

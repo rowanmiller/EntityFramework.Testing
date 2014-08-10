@@ -1,14 +1,31 @@
-﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
+﻿//-----------------------------------------------------------------------------------------------------
+// <copyright file="MockDbSetExtenstions.cs" company="Scott Xu">
+//   Copyright (c) 2014 Scott Xu.
+// </copyright>
+//-----------------------------------------------------------------------------------------------------
 
 namespace EntityFramework.Testing.Moq
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Linq;
+    using global::Moq;
+
+    /// <summary>
+    /// Extension methods to <see cref="Mock{DbSet{TEntity}}"/>.
+    /// </summary>
     public static class MockDbSetExtenstions
     {
+        /// <summary>
+        /// Setup data to <see cref="Mock{DbSet{TEntity}}"/>.
+        /// </summary>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="mock">The <see cref="Mock{DbSet{TEntity}}"/>.</param>
+        /// <param name="data">The seed data.</param>
+        /// <param name="find">The find action.</param>
+        /// <returns>The updated <see cref="Mock{DbSet{TEntity}}"/>.</returns>
         public static Mock<DbSet<TEntity>> SetupData<TEntity>(this Mock<DbSet<TEntity>> mock, ICollection<TEntity> data = null, Func<object[], TEntity> find = null) where TEntity : class
         {
             data = data ?? new List<TEntity>();
