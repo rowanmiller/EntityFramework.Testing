@@ -44,33 +44,33 @@ namespace EntityFramework.Testing.Moq
             mock.Setup(m => m.Include(It.IsAny<string>())).Returns(mock.Object);
             mock.Setup(m => m.Find(It.IsAny<object[]>())).Returns<object[]>(find);
 
-            mock.Setup(m => m.Remove(It.IsAny<TEntity>())).Callback<TEntity>(t =>
+            mock.Setup(m => m.Remove(It.IsAny<TEntity>())).Callback<TEntity>(entity =>
             {
-                data.Remove(t);
+                data.Remove(entity);
                 mock.SetupData(data, find);
             });
 
-            mock.Setup(m => m.RemoveRange(It.IsAny<IEnumerable<TEntity>>())).Callback<IEnumerable<TEntity>>(r =>
+            mock.Setup(m => m.RemoveRange(It.IsAny<IEnumerable<TEntity>>())).Callback<IEnumerable<TEntity>>(entities =>
             {
-                foreach (var t in r)
+                foreach (var entity in entities)
                 {
-                    data.Remove(t);
+                    data.Remove(entity);
                 }
 
                 mock.SetupData(data, find);
             });
 
-            mock.Setup(m => m.Add(It.IsAny<TEntity>())).Callback<TEntity>(t =>
+            mock.Setup(m => m.Add(It.IsAny<TEntity>())).Callback<TEntity>(entity =>
             {
-                data.Add(t);
+                data.Add(entity);
                 mock.SetupData(data, find);
             });
 
-            mock.Setup(m => m.AddRange(It.IsAny<IEnumerable<TEntity>>())).Callback<IEnumerable<TEntity>>(t =>
+            mock.Setup(m => m.AddRange(It.IsAny<IEnumerable<TEntity>>())).Callback<IEnumerable<TEntity>>(entities =>
             {
-                foreach (var e in t)
+                foreach (var entity in entities)
                 {
-                    data.Add(e);
+                    data.Add(entity);
                 };
 
                 mock.SetupData(data, find);
