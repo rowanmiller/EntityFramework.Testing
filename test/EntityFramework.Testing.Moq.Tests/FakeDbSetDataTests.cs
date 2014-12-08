@@ -10,6 +10,7 @@ namespace EntityFramework.Testing.Moq.Tests
     [TestClass]
     public class FakeDbSetDataTests
     {
+        [TestMethod]
         public void Data_is_addded_to_set()
         {
             var data = new List<Blog> { new Blog(), new Blog() };

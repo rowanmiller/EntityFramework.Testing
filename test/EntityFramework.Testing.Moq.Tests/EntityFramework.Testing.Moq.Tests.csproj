@@ -60,6 +60,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FakeDbSetDataOperationsTests.cs" />
     <Compile Include="FakeDbSetDataTests.cs" />
     <Compile Include="FakeDbSetLinqTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

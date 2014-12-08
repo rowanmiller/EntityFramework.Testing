@@ -29,9 +29,19 @@ namespace EntityFramework.Testing.Moq
             get { return _queryable; }
         }
 
+        internal void AddData(TEntity data)
+        {
+            _data.Add(data);
+        }
+
         internal void AddData(IEnumerable<TEntity> data)
         {
             _data.AddRange(data);
+        }
+
+        internal void RemoveData(TEntity data)
+        {
+            _data.Remove(data);
         }
     }
 }
