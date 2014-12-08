@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.0-apha1</version>
+    <version>1.0.0-apha2</version>
     <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
@@ -13,7 +13,7 @@
     <copyright>Copyright 2014</copyright>
     <tags>Entity Framework EF EF6 Testing</tags>
     <dependencies>
-      <dependency id="EntityFramework.Testing" version="1.0.0-alpha1" />
+      <dependency id="EntityFramework.Testing" version="1.0.0-alpha2" />
     </dependencies>
   </metadata>
 </package>
